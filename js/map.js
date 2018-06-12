@@ -189,7 +189,7 @@ function populateCcgInfo(name, stat, outputDetails, outputStat) {
     ccg_help = document.createTextNode("Patient outcomes: " + stat + " per cent of patients said that, on reflection, they did not get the help that mattered to them at all times");
 
   } else {
-    var ccg_help = document.createTextNode("No data is available for % of residents get help (change)");
+    var ccg_help = document.createTextNode("No data is available for this area");
   }
 
   document.querySelector(outputStat).appendChild(ccg_help);
