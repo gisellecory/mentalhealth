@@ -139,7 +139,7 @@ function draw(ccg_boundaries) {
 // Legend
 
 var colours = ["#ffffd4", "#fed98e", "#fe9929", "#d95f0e", "#993404"];
-var legend_text = ["0 - 9%", "10% - 19%", "20 - 29%", "30 - 40%", "40% and above"];
+var legend_text = ["0 - 9%", "10% - 19%", "20 - 29%", "30 - 39%", "40% and above"];
 
 var legend = svg_map.selectAll('.legend')
     .data(colours);
