@@ -1,0 +1,281 @@
+/* Style sheet for visualisation project, MSc Cardiff, May 2018
+This CSS is written for mobile-first, i.e. max-wdtih:450px, with media queries for larger screens */
+
+/* Remove default browser settings */
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Default text options (across the site) */
+
+html {
+  font-size: 14px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* Body */
+
+html, body {
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  background-color: white;
+  font-size: 1.1rem;
+}
+
+/* Containers */
+
+div.container_master {
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+div.chart_container {
+  padding:10px;
+}
+
+/* Headings */
+
+h1 {
+  text-align: center;
+  font-size: 7vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  color: #fe9929
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 5vw;
+  padding:0;
+}
+
+#byline {
+  font-size: 4vw;
+}
+
+#title_byline {
+  text-align: center;
+}
+
+/* Other text and links */
+
+strong {
+  font-weight: bolder;
+  color: #fe9929;
+}
+
+/* Header/Navigation */
+
+header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  background-color: #595959;
+  min-height: 6vh;
+  max-height: 7vh;
+  min-width: 100vw;
+  position: relative;
+  top: 0;
+  padding: 1vh 1vw;
+}
+
+#header_img {
+  min-height: 35vh;
+  min-width: 100vw;
+  background-image: url("../imagelib/header.jpg");
+  background-size: cover;
+}
+
+#icon {
+  max-height: 5vh;
+}
+
+/* Drop down menus */
+
+.dropdown {
+  padding: 10px;
+  text-align: center;
+}
+
+/* Bar chart */
+
+.bar:hover {
+  fill: #fe9929;
+}
+
+#timeseries {
+  min-height: 60vh;
+  max-width: 90vw;
+}
+
+#timeseries_svg {
+  /* This centres the bar chart */
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.axis {
+  font: 14px sans-serif;
+}
+
+.grid line {
+  stroke: grey; /* colour of grid lines  */
+  stroke-opacity: 0.6;
+  shape-rendering: crispEdges;
+}
+
+.grid .tick {
+  stroke: grey;
+  opacity: 0.2;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+/* Map */
+
+#vis {
+  min-height: 70vh;
+  max-width: 90vw;
+  /* display: block; */
+  /* margin:10px; */
+  /* margin-left: 3vw; */
+  /* margin-right: 3vw; */
+}
+
+#svg_map {
+  margin: 10px;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.legend_text {
+  font-size:3vw;
+}
+
+#info {
+  background-color: #eee;
+  opacity: 0.9;
+  border-style: dashed;
+  border-width: thin;
+  border-color: black;
+  padding: 10px;
+  margin:10px;
+}
+
+/* Footer/social media */
+
+footer {
+  background-color: #595959;
+  min-width: 100%;
+  max-height: 20vh;
+  position: relative;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer a#footnote_link:link, footer a#footnote_link:visited {
+  color: white;
+}
+
+footer a#footnote_link:hover, footer a#footnote_link:active {
+  background-color: lightgrey;
+  color: #706f6f;
+}
+
+footer p.copyright_notice {
+  text-align: left;
+  color: white;
+  display: block;
+  font-style: italic;
+  font-size: 0.9em;
+  margin: 10px;
+  margin-bottom: 5px;
+}
+
+div.container_social {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+  margin: 4px 10px;
+  padding-bottom: 1vh;
+}
+
+.social_img {
+  margin-left: 2vh;
+  margin-right: 2vh;
+  max-width: 7vh;
+}
+
+/* /////// */
+/* MEDIA QUERIES - for screen widths above 450px
+
+(Query 1) To be applied at all widths above 450px */
+
+@media(min-width:450px) {
+  .social_img {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+
+  #info {
+    padding: 10px;
+    position: absolute;
+    max-width: 30%;
+    z-index: 1; /* vertical ordering (i.e. on top) */
+    margin-right: 20px;
+    margin-left: 40px;
+    margin-top: 30px;
+  }
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+#byline {
+  font-size: 1rem;
+}
+
+.legend_text {
+  font-size:14px;
+}
+
+#svg_map {
+  border-style: dashed;
+  border-width: thin;
+  border-color: black;
+}
+
+}
+
+/* (Query 2) To be applied for larger widths only (above 750px) */
+
+@media(min-width:750px) {
+
+  footer {
+    flex-direction: row;
+  }
+  .container_master {
+    margin-left: 6vw;
+    margin-right: 6vw;
+    }
+}
