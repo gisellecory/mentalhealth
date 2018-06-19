@@ -33,8 +33,9 @@ div.container_master {
   max-width: 95vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
+  text-align: left;
 }
 
 div.chart_container {
@@ -44,11 +45,11 @@ div.chart_container {
 /* Headings */
 
 h1 {
-  text-align: center;
-  font-size: 7vw;
+  /* text-align: center; */
+  font-size: 5vw;
   margin-left: 2vw;
   margin-right: 2vw;
-  color: #fe9929
+  color: #d29000
 }
 
 h2 {
@@ -72,13 +73,17 @@ strong {
   color: #fe9929;
 }
 
+p #intro {
+  text-align: left;
+}
+
 /* Header/Navigation */
 
 header {
   display: flex;
   align-items: center;
   flex-direction: row;
-  background-color: #595959;
+  background-color: white;
   min-height: 6vh;
   max-height: 7vh;
   min-width: 100vw;
@@ -111,12 +116,12 @@ header {
   fill: #fe9929;
 }
 
-#timeseries {
+#barchart {
   min-height: 60vh;
   max-width: 90vw;
 }
 
-#timeseries_svg {
+#chart_svg {
   /* This centres the bar chart */
   display:block;
   margin-left: auto;
@@ -243,12 +248,12 @@ div.container_social {
   }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 h2 {
   font-size: 2rem;
-  text-align: center;
+  /* text-align: center; */
 }
 
 #byline {

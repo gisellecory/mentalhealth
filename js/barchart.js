@@ -1,21 +1,24 @@
 // Javascript for bar chart
 
 // Global Variables
-var x_scale;
-var y_scale;
-var data;
-var xaxis;
-var yaxis;
-var svg;
-var elements;
-var selectedDisorder;
+var x_scale_bar;
+var y_scale_bar;
+var data_bar;
+var xaxis_bar;
+var yaxis_bar;
+var svg_bar;
+var elements_bar;
+var selectedDataseries_bar;
+var bars;
 
 //  Width and height of element
-var width = 0.8*(document.getElementById("timeseries").clientWidth);
-var height = document.getElementById("timeseries").clientHeight;
+var width_bar = (document.getElementById("barchart").clientWidth);
+var height_bar = document.getElementById("barchart").clientHeight;
+// console.log(width_bar) // 768
+// console.log(height_bar) // 481
 
 // Margin
-var margin = {
+var margin_bar = {
   top: 10,
   left: 50,
   right: 10,
@@ -23,93 +26,97 @@ var margin = {
 };
 
 // read in data and Draw the chart framework
-d3.csv('data/timeseries.csv', createChart);
+d3.csv('data/lad_data_nocol.csv', createChart_bar);
 
-function createChart(_data){
+function createChart_bar(_dataBar) {
 
-  // need data to be global for redraw function
-  data = _data
+  // need data to be global for redrawBar function
+  data_bar = _dataBar
+
+  data_bar.sort(function(a, b) {
+    return b.charity_count_local - a.charity_count_local;
+  });
 
   // Get every column value
-  elements = Object.keys(_data[0])
+  elements_bar = Object.keys(_dataBar[0])
     .filter(function(d) {
-      return (d != "year");
+      return (d != "oslaua" && d != "la_name");
     });
 
-  selectedDisorder = elements[0];
+  selectedDataseries_bar = elements_bar[0];
 
-  createChartFrame(_data, drawBar)
+  createChartFrame_bar(_dataBar, drawBar)
 
 }
 
 // Draw the chart framework
-function createChartFrame(_data, callback) {
+function createChartFrame_bar(_dataBar, callback) {
   // Creating an SVG element by appending it into div
-  svg = d3.select('#timeseries')
+  svg_bar = d3.select('#barchart')
     .append('svg')
-    .attr('height', height)
-    .attr('width', width)
-    .attr('id', 'timeseries_svg')
+    .attr('height', height_bar)
+    .attr('width', width_bar)
+    .attr('id', 'chart_svg')
     .append('g') // adding a group (which is the element we are drawing into)
-    .attr('transform', 'translate(' + (margin.left) + ',' + (margin.top) + ')');
+    .attr('transform', 'translate(' + (margin_bar.left) + ',' + (margin_bar.top) + ')');
 
   // Take into account the margin in size of drawing canvas
-  width = width - margin.left - margin.right;
-  height = height - margin.top - margin.bottom;
+  width_bar = width_bar - margin_bar.left - margin_bar.right;
+  height_bar = height_bar - margin_bar.top - margin_bar.bottom;
 
   // Output range ( range that values can take on screen) and input domain
-  x_scale = d3.scaleLinear()
-    .rangeRound([0, width])
-    .domain(d3.extent(data, function(d) {
-      return +d.year;
+  x_scale_bar = d3.scaleLinear()
+    .rangeRound([0, width_bar])
+    .domain(d3.extent(data_bar, function(d) {
+      return +d.Pct_Leave;
     }));
 
-  y_scale = d3.scaleLinear()
-    .rangeRound([height, 0]) // NB: SVG co-ords are flipped!
-    .domain([0, d3.max(data, function(d) {
-      return (+d[selectedDisorder] * 1.1);
+  y_scale_bar = d3.scaleLinear()
+    .rangeRound([height_bar, 0]) // NB: SVG co-ords are flipped!
+    .domain([0, d3.max(data_bar, function(d) {
+      return (+d[selectedDataseries_bar] * 1.1);
     })]);
 
   // Add the x axis
-  xaxis = d3.axisBottom(x_scale);
+  xaxis_bar = d3.axisBottom(x_scale_bar);
 
-  svg.append('g')
-    .attr('transform', 'translate(0, ' + (height) + margin.top + ')')
-    .call(d3.axisBottom(x_scale));
+  svg_bar.append('g')
+    .attr('transform', 'translate(0, ' + (height_bar) + margin_bar.top + ')')
+    .call(d3.axisBottom(x_scale_bar));
 
   // Remove axis tick marks on x axis
-  svg.selectAll(".tick").attr("visibility", "hidden");
+  svg_bar.selectAll(".tick").attr("visibility", "hidden");
 
   // Add text label for the x axis
-  svg.append('text')
-    .attr('transform', 'translate(' + (width / 2) + ' ,' +
-      (height + margin.top + 30) + ')')
+  svg_bar.append('text')
+    .attr('transform', 'translate(' + (width_bar / 2) + ' ,' +
+      (height_bar + margin_bar.top + 30) + ')')
     .style("text-anchor", "middle")
-    .text("Year");
+    .text("Local Authority Districts");
 
   // Add the y axis
-  yaxis = d3.axisLeft(y_scale);
+  yaxis_bar = d3.axisLeft(y_scale_bar);
 
-  svg.append('g')
+  svg_bar.append('g')
     .attr("class", "y axis")
-    .call(d3.axisLeft(y_scale))
+    .call(d3.axisLeft(y_scale_bar))
     .style("font", "10px");
 
   // Add text label for the y axis
-  svg.append("text")
+  svg_bar.append("text")
     .attr("transform", "rotate(-90)")
     // .style("font", "1.1rem")
-    .attr("y", 0 - margin.left)
-    .attr("x", 0 - (height / 2))
+    .attr("y", 0 - margin_bar.left)
+    .attr("x", 0 - (height_bar / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Proportion of adults");
 
   // Add gridlines
-  svg.append("g")
+  svg_bar.append("g")
     .attr("class", "grid")
-    .call(make_y_gridlines(y_scale)
-      .tickSize(-width)
+    .call(make_y_gridlines_bar(y_scale_bar)
+      .tickSize(-width_bar)
       .tickFormat("")
     )
 
@@ -117,10 +124,10 @@ function createChartFrame(_data, callback) {
   var selector = d3.select("#drop_chart")
     .append("select")
     .attr("id", "dropdown_bar")
-    .on("change", redraw);
+    .on("change", redrawBar);
 
   selector.selectAll("option")
-    .data(elements)
+    .data(elements_bar)
     .enter()
     .append("option")
     .attr("value", function(d) {
@@ -130,41 +137,46 @@ function createChartFrame(_data, callback) {
       return d;
     })
 
-callback()
+  callback()
 
-} // End of createChartFrame
+} // End of createChartFrame_bar
 
 // gridlines in y axis function
-function make_y_gridlines(y_scale) {
-  return d3.axisLeft(y_scale)
+function make_y_gridlines_bar(y_scale_bar) {
+  return d3.axisLeft(y_scale_bar)
     .ticks(10)
 }
 
 // Populate bar chart
 function drawBar() {
 
-  var bars = svg.selectAll("rect")
-    .data(data);
+  bars = svg_bar.selectAll("rect")
+    .data(data_bar);
 
   bars
     .enter()
     .append('rect')
     .attr('class', 'bar')
-    .attr('width', width / 6)
+    .attr('width', width_bar / data_bar.length)
     .attr('fill', '#fee391')
     .attr('x', function(d, i) {
-      return 20 + (width / data.length) * i; // return 20 + (i*120) + 'px';
+      return 20 + (width_bar / data_bar.length) * i;
     })
     .attr('height', function(d) {
-      return (height - y_scale(+d.Common_mental_disorders)); // + 'px'
+      // console.log(+d.threesixty_national) // 26
+      // console.log(height_bar); // 431
+      // console.log(y_scale_bar(parseFloat(+d.threesixty_national))); // 424
+      // console.log(height_bar - y_scale_bar(parseFloat(+d.threesixty_national))) // 7
+
+      return (height_bar - y_scale_bar(+d.charity_count_local));
     })
     .attr("y", function(d) {
-      return y_scale(+d.Common_mental_disorders);
+      return y_scale_bar(+d.charity_count_local);
     });
 
   // Add data labels
-  var labels = svg.selectAll('.label')
-    .data(data);
+  var labels = svg_bar.selectAll('.label')
+    .data(data_bar);
 
   labels
     .enter()
@@ -176,56 +188,74 @@ function drawBar() {
       return d.year;
     })
     .attr('x', function(d, i) {
-      return (width / 12) + (i / 4) * +width + 'px';
+      return (width_bar / 12) + (i / 4) * +width_bar + 'px';
     })
     .attr('y', function(d) {
-      return height + 20;
+      return height_bar + 20;
     });
 
-populateChartTitle(selectedDisorder);
+  populateChartTitleBar(selectedDataseries_bar);
 
 } // End of drawBar
 
 // Create chart titles
-function populateChartTitle(input) {
-chartTitle = document.getElementById("chart_title");
-chartTitle.innerHTML = '';
-var chartTitleText = document.createTextNode("Prevalence of " + input + " among adults in England, 1993 to 2014");
-chartTitle.appendChild(chartTitleText);
+function populateChartTitleBar(input) {
+  chartTitle = document.getElementById("chart_title");
+  chartTitle.innerHTML = '';
+  var chartTitleText = document.createTextNode("Series: " + input);
+  chartTitle.appendChild(chartTitleText);
 }
 
 // Redraw bar chart after selection from drop down
-function redraw(e) {
+function redrawBar(e) {
 
-  dropdownList = document.getElementById("dropdown_bar");
-  selectedDisorder = dropdownList[dropdownList.selectedIndex]
+  dropdownListBar = document.getElementById("dropdown_bar");
+  selectedDataseries_bar = dropdownListBar[dropdownListBar.selectedIndex]
+  console.log(selectedDataseries_bar.value)
+  var selectedDataseries_bar_name = selectedDataseries_bar.value
 
-  y_scale.domain([0, d3.max(data, function(d) {
-    return (+d[selectedDisorder.value] * 1.1);
+  y_scale_bar.domain([0, d3.max(data_bar, function(d) {
+    return (+d[selectedDataseries_bar.value] * 1.1);
   })]);
-  yaxis.scale(y_scale);
-  svg.selectAll("rect")
+
+  yaxis_bar.scale(y_scale_bar);
+
+// Here I want to refresh the data, bringing it in again and sorting by selectedDataseries_bar_name
+
+console.log(selectedDataseries_bar_name)
+// console.log(data_bar);
+data_bar.sort(function(a, b) {
+  console.log( b[selectedDataseries_bar_name])
+  return b[selectedDataseries_bar_name] - a[selectedDataseries_bar_name];
+});
+// console.log(data_bar);
+
+bars = svg_bar.selectAll("rect")
+    .data(data_bar)
     .transition()
     .attr('height', function(d) {
-      return (height - y_scale(+d[selectedDisorder.value]));
+      return (height_bar - y_scale_bar(+d[selectedDataseries_bar.value]));
+      // return (height_bar - y_scale_bar(+d.threesixty_national));
     })
     .attr("x", function(d, i) {
-      return 20 + (width / data.length) * i;
+      return 20 + (width_bar / data_bar.length) * i;
+      // return 20 + (width_bar / data_bar.length) * i;
     })
     .attr("y", function(d) {
-      return y_scale(+d[selectedDisorder.value]);
+      return y_scale_bar(+d[selectedDataseries_bar.value]);
+      // return y_scale_bar(+d.threesixty_national);
     })
     .ease(d3.easeCubicInOut)
     .duration(750)
     .select("title")
     .text(function(d) {
-      return d[selectedDisorder.value];
+      return d[selectedDataseries_bar.value];
     });
 
   d3.selectAll("g.y.axis")
     .transition()
-    .call(yaxis);
+    .call(yaxis_bar);
 
-    populateChartTitle(selectedDisorder.value);
+  populateChartTitleBar(selectedDataseries_bar.value);
 
-} // End of redraw
+} // End of redrawBar

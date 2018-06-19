@@ -6,13 +6,17 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Mental health analysis (England)</title>
+  <title>Young Foundation</title>
 
   <!-- External items -->
   <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
+  <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+  <script src="js/externalJS/d3.v4.min.js"></script>
+
+  <!-- <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> -->
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script> -->
+  <script src="js/externalJS/d3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 
@@ -20,83 +24,107 @@
   <!-- Banners etc -->
   <header>
     <a href="index.html"><img id="icon" src="imagelib/icon.png" alt="Icon"></a>
+    <h1 id="title"> Visualisations </h1>
   </header>
 
-  <div id="header_img"></div>
+  <!-- <div id="header_img"></div> -->
 
-  <div id="title_byline">
-    <h1 id="title"> England's mental health check up </h1>
-    <p id="byline"><i>By student 1753935, 8th May 2018</i></p>
-  </div>
+  <!-- <div id="title_byline">
+    <p id="byline">Giselle Cory, June 2018</p>
+  </div> -->
 
   <!-- Master container -->
   <div class="container_master">
 
+    <p id="intro">Page contains:
+      <ul>
+        <li>Bar charts</li>
+        <li>Histograms</li>
+        <li>Heat maps</li>
+      </ul>
+    </p>
+
     <!-- Bar chart container -->
     <div id="bar_container" class="chart_container">
-      <h2>Instances of mental ill health have risen</h2>
-      <p>
-        An estimated 1 in 5 people had experienced a 'common mental disorder' like depression or anxiety in the past week when surveyed. This has risen from 1 in 6 in 1993 - a change of 15.5 per cent to 18.9 per cent. Anxiety (in the form of Generalised Anxiety
-        Disorder), depression and drug dependence are the most common illnesses.</p>
-      <p>Many indidividuals go on to access mental health care. 1 million people were in contact adult mental health services as of December 2017. People often have to wait a long time for this care. Waiting times for psychological therapy vary from 16 days
-        in Waltham Forest to 167 days in Leicester (counting waits for both first and second treatment)
-      </p>
+      <h2>Bar charts</h2>
+      <p>Text</p>
 
       <div id="drop_chart" class="dropdown">
-        <p> <strong>Choose a mental health condition to display on the chart</strong></p>
+        <p> <strong>Choose from dropdown</strong></p>
       </div>
-      <div id="timeseries">
+      <div id="barchart">
         <h3 id="chart_title"></h3></div>
-      <p><i>Data source: NHS Digital (2016) <a href="https://digital.nhs.uk/data-and-information/publications/statistical/adult-psychiatric-morbidity-survey/adult-psychiatric-morbidity-survey-survey-of-mental-health-and-wellbeing-england-2014" target="_blank">Adult Psychiatric Morbidity Survey</a></i></p>
+      <p><i>Data source: [ ] </i></p>
+    </div>
+
+    <!-- Histogram container -->
+    <div id="histo_container" class="chart_container">
+      <h2>Histogram</h2>
+      <p>Text</p>
+
+      <div id="drop_histo" class="dropdown">
+        <p> <strong>Choose from dropdown</strong></p>
+      </div>
+      <div id="histogram">
+        <h3 id="histo_title"></h3></div>
+      <p><i>Data source: [ ] </i></p>
+      <div id="histo_summary">
+      </div>
+    </div>
+
+
+    <!-- Stacked bar chart container -->
+    <div id="stacked_container" class="chart_container">
+      <h2>Stacked bar charts</h2>
+      <p>Text</p>
+
+      <!-- <div id="drop_stacked" class="dropdown">
+        <p> <strong>Choose from dropdown</strong></p>
+      </div> -->
+      <div id="stacked">
+        <h3 id="stacked_title"></h3></div>
+        <svg width="960" height="500" id="svg_stacked"></svg>
+      <p><i>Data source: [ ] </i></p>
     </div>
 
     <!-- Map container -->
-
     <div id="map_container" class="chart_container">
-      <h2> How is your area doing? </h2>
-      <p>Yet not all of these experiences with mental health care are positive. Patients of IAPT (<a href="https://www.england.nhs.uk/mental-health/adults/iapt/" target="_blank">Improving Access to Psychological Therapies</a> programme, the principal way to access mental health care) are asked about their experiences, including if,
-        on reflection, they got the help that mattered to them at all times. Throughout England, three out of four (75 per cent) said yes - so one quarter of patients without the support they needed.</p>
-      <p>Younger people, people living in deprived areas, and people with disabilities are all less likely than average to recover from their condition after psychological therapy.</p>
-
+      <h2>Maps</h2>
 
       <div id="drop_map" class="dropdown">
         <p> <strong>Click on the map to see stats for each CCG, or select from the menu below:</strong></p>
       </div>
 
-      <h3>Porportion of people in England who got sufficient support, of those who needed it, by Clinical Commissioning Groups in England (2016/17)</h3>
+      <h3 id="map_title"></h3>
       <div id="info">
-        <p id="ccg_name">Click an area</p>
-        <p id="gethelp"></p></div>
+        <p id="area_name">Click an area</p>
+        <p id="stat"></p>
+      </div>
 
       <div id="vis"></div>
 
-      <p><i>Data source: NHS Digital (2018) <a href="https://digital.nhs.uk/data-and-information/publications/statistical/psychological-therapies-report-on-the-use-of-iapt-services/psychological-therapies-annual-report-on-the-use-of-iapt-services-england-further-analyses-on-2016-17" target="_blank">Psychological Therapies: Annual report on the use of IAPT services England, further analyses on 2016-17</a>. Grey areas have no available data.</i></p>
+      <p><i>Data source: [ ]</i></p>
     </div>
 
     <!-- End master container -->
   </div>
 
-  <!-- Footer: copyright notice and social media icons -->
-  <footer>
-    <p class="copyright_notice">This site is published under a <a id="footnote_link" href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">Creative Commons</a> license.</p>
-
-    <!-- Social media -->
-    <div class="container_social">
-      <a href="https://www.facebook.com/" target="_blank"><img src="imagelib/facebook.png" alt="Facebook icon" class="social_img"></a>
-      <a href="mailto:example@email.com" target="_blank"><img src="imagelib/email.png" alt="Email icon" class="social_img"></a>
-      <a href="https://twitter.com/" target="_blank"><img src="imagelib/twitter.png" alt="Twitter icon" class="social_img"></a>
-      <a href="https://www.instagram.com/" target="_blank"><img src="imagelib/instagram.png" alt="Instagram icon" class="social_img"></a>
-    </div>
-  </footer>
-
   <!-- Libraries -->
   <script src="./js/externalJS/d3.min.js"></script>
   <script src="./js/externalJS/d3-queue.min.js"></script>
-  <script src="https://unpkg.com/topojson@3"></script>
+
+  <!-- <script src="https://unpkg.com/topojson@3"></script> -->
+  <script src="js/externalJS/topojson.js"></script>
+
+  <!-- <script src="//d3js.org/colorbrewer.v1.js"></script> -->
+  <script src="js/externalJS/colorbrewer.v1.js"></script>
+
 
   <!-- Chart scripts -->
   <script src="js/barchart.js"></script>
   <script src="./js/map.js"></script>
+  <script src="./js/histogram.js"></script>
+  <script src="js/stacked.js"></script>
 
 </body>
 
