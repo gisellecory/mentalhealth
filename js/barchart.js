@@ -158,7 +158,7 @@ function drawBar() {
     .append('rect')
     .attr('class', 'bar')
     .attr('width', width_bar / data_bar.length)
-    .attr('fill', '#fee391')
+    .attr('fill', '#d29000')
     .attr('x', function(d, i) {
       return 20 + (width_bar / data_bar.length) * i;
     })

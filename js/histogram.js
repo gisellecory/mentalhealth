@@ -154,7 +154,7 @@ function createChartFrame_hist(_dataHist, callback) {
   // Respond to change in dropdown menu selection
   var selector = d3.select("#drop_histo")
     .append("select")
-    .attr("id", "dropdown_histo")
+    // .attr("id", "dropdown_histo")
     .on("change", redrawHist);
 
   selector.selectAll("option")
@@ -192,14 +192,14 @@ function drawHist() {
       return y_scale_hist(d.length);
     })
     .attr('width', function(d) {
-      console.log(x_scale_hist(d.x1 - d.x0));
+      // console.log(x_scale_hist(d.x1 - d.x0));
       return x_scale_hist(d.x1 - d.x0);
     }) //
     .attr('height', function(d) {
       // console.log(height_hist - y_scale_hist(d.length))
       return height_hist - y_scale_hist(d.length);
     }) //
-    .attr('fill', '#fee391')
+    .attr('fill', '#abac00')
     .attr('class', 'bar')
 
   // Add data labels

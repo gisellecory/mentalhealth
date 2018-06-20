@@ -6,7 +6,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Young Foundation</title>
+  <title>Young Foundation pages</title>
 
   <!-- External items -->
   <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
@@ -24,7 +24,7 @@
   <!-- Banners etc -->
   <header>
     <a href="index.html"><img id="icon" src="imagelib/icon.png" alt="Icon"></a>
-    <h1 id="title"> Visualisations </h1>
+    <h1 id="title"> Visualisations - early drafts </h1>
   </header>
 
   <!-- <div id="header_img"></div> -->
@@ -36,10 +36,11 @@
   <!-- Master container -->
   <div class="container_master">
 
-    <p id="intro">Page contains:
+    <p id="intro">This page contains:
       <ul>
         <li>Bar charts</li>
         <li>Histograms</li>
+        <li>Stacked bar chart</li>
         <li>Heat maps</li>
       </ul>
     </p>
@@ -47,10 +48,8 @@
     <!-- Bar chart container -->
     <div id="bar_container" class="chart_container">
       <h2>Bar charts</h2>
-      <p>Text</p>
-
       <div id="drop_chart" class="dropdown">
-        <p> <strong>Choose from dropdown</strong></p>
+        <p> <strong>Select from options below</strong></p>
       </div>
       <div id="barchart">
         <h3 id="chart_title"></h3></div>
@@ -59,11 +58,9 @@
 
     <!-- Histogram container -->
     <div id="histo_container" class="chart_container">
-      <h2>Histogram</h2>
-      <p>Text</p>
-
+      <h2>Histograms</h2>
       <div id="drop_histo" class="dropdown">
-        <p> <strong>Choose from dropdown</strong></p>
+        <p> <strong>Select from options below</strong></p>
       </div>
       <div id="histogram">
         <h3 id="histo_title"></h3></div>
@@ -75,9 +72,7 @@
 
     <!-- Stacked bar chart container -->
     <div id="stacked_container" class="chart_container">
-      <h2>Stacked bar charts</h2>
-      <p>Text</p>
-
+      <h2>Stacked bar chart</h2>
       <!-- <div id="drop_stacked" class="dropdown">
         <p> <strong>Choose from dropdown</strong></p>
       </div> -->
@@ -89,10 +84,13 @@
 
     <!-- Map container -->
     <div id="map_container" class="chart_container">
-      <h2>Maps</h2>
+      <h2>Heat maps</h2>
+      <div id="drop_map_areas" class="dropdown">
+        <p> <strong>Click on the map to see stats for each area, or select from the menu below</strong></p>
+      </div>
 
-      <div id="drop_map" class="dropdown">
-        <p> <strong>Click on the map to see stats for each CCG, or select from the menu below:</strong></p>
+      <div id="drop_map_series" class="dropdown">
+        <p> <strong>Select data series</strong></p>
       </div>
 
       <h3 id="map_title"></h3>
