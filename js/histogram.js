@@ -37,6 +37,7 @@ function createChart_hist(_dataHist) {
   data_hist = _dataHist
 
   // Get every column value
+  // console.log(Object.keys(_dataHist[0]))
   elements_hist = Object.keys(_dataHist[0])
     .filter(function(d) {
       return (d != "oslaua" && d != "la_name" && d != "public_ core_spend_m_rank" && d != "public_core_spend_per_head_rank");
@@ -154,7 +155,7 @@ function createChartFrame_hist(_dataHist, callback) {
   // Respond to change in dropdown menu selection
   var selector = d3.select("#drop_histo")
     .append("select")
-    // .attr("id", "dropdown_histo")
+    .attr("id", "dropdown_histo")
     .on("change", redrawHist);
 
   selector.selectAll("option")
@@ -274,8 +275,9 @@ histSummaryDiv.appendChild(list);
 function redrawHist(e) {
 
   dropdownListHist = document.getElementById("dropdown_histo");
+
   selectedDisorder_hist = dropdownListHist[dropdownListHist.selectedIndex]
-  console.log("the selected data series is " + selectedDisorder_hist.value);
+  // console.log("the selected data series is " + selectedDisorder_hist.value);
 
   map = data_hist.map(function(d) {
     return parseFloat(+d[selectedDisorder_hist.value]);
@@ -293,14 +295,12 @@ function redrawHist(e) {
       .enter()
       .append("g")
 
-  console.log("the histogram data array is ");
-  console.log(histogram_data);
-
-  console.log("the largest array (and therefore the y-axis limit) is " + d3.max(histogram_data.map(function(d) {
-    return d.length;
-  })))
-
-  console.log("the largest value (and therefore the x axis limit) is " + d3.max(map));
+  // console.log("the histogram data array is ");
+  // console.log(histogram_data);
+  // console.log("the largest array (and therefore the y-axis limit) is " + d3.max(histogram_data.map(function(d) {
+  //   return d.length;
+  // })))
+  // console.log("the largest value (and therefore the x axis limit) is " + d3.max(map));
 
   x_scale_hist = d3.scaleLinear()
     // .domain([0, d3.max(map)])
@@ -342,16 +342,13 @@ function redrawHist(e) {
   svg_hist.selectAll(".bar")
     .transition()
     .attr('height', function(d) {
-      console.log("Height is " + (height_hist - y_scale_hist(d.length)))
+      // console.log("Height is " + (height_hist - y_scale_hist(d.length)))
       return height_hist - y_scale_hist(d.length)
       // (height_hist - y_scale_hist(+d[selectedDisorder_hist.value]))
       ;
     })
     .attr('width', function(d) {
-      console.log(d.x1)
-      console.log(d.x0)
-      console.log(d.x1 - d.x0)
-      console.log("Width is " + x_scale_hist(d.x1 - d.x0));
+      // console.log("Width is " + x_scale_hist(d.x1 - d.x0));
       return x_scale_hist(d.x1 - d.x0);
     }) //
     .attr("x", function(d, i) {
