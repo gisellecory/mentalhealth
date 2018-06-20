@@ -31,11 +31,38 @@ var b;
 var s;
 var t;
 
-var f = d3.format(".1f");
+//// No decimal place and thousand separator
+var formatText = d3.format(",.0f");
 var legend_text = [];
 
+// Colour pallete 1
+var colourSet1_colour1 = "#E9A0CD"; // Light
+var colourSet1_colour2 = "#D690BB";
+var colourSet1_colour3 = "#C480AA";
+var colourSet1_colour4 = "#B17098";
+var colourSet1_colour5 = "#9F6087";
+var colourSet1_colour6 = "#8C5075";
+var colourSet1_colour7 = "#7A4064";
+var colourSet1_colour8 = "#673052";
+var colourSet1_colour9 = "#552041"; // Dark
+
+// Colour pallete 2
+var colourSet2_colour1 = "#9A3272";
+var colourSet2_colour2 = "#A53F7E";
+var colourSet2_colour3 = "#B14C8A";
+var colourSet2_colour4 = "#BC5996";
+var colourSet2_colour5 = "#C867A3";
+var colourSet2_colour6 = "#D474AF";
+var colourSet2_colour7 = "#DF81BB";
+var colourSet2_colour8 = "#EB8EC7";
+var colourSet2_colour9 = "#F79CD4";
+
+
 // set colour scale
-var colours = colorbrewer.Blues[9]
+var colours = [d3.rgb(colourSet1_colour1), d3.rgb(colourSet1_colour2), d3.rgb(colourSet1_colour3), d3.rgb(colourSet1_colour4), d3.rgb(colourSet1_colour5), d3.rgb(colourSet1_colour6), d3.rgb(colourSet1_colour7), d3.rgb(colourSet1_colour8), d3.rgb(colourSet1_colour9)];
+
+// var colours = colorbrewer.Blues[9]
+
 var colour_scale = d3.scaleQuantile()
   .range(colours)
 
@@ -196,7 +223,7 @@ function draw(boundaries) {
   // Legend
   legend_text = [];
   for (var i = 0; i < colours.length; i++) {
-    legend_text.push(f(colour_scale.invertExtent(colours[i])[0]) + " - " + f(colour_scale.invertExtent(colours[i])[1]));
+    legend_text.push(formatText(colour_scale.invertExtent(colours[i])[0]) + " - " + formatText(colour_scale.invertExtent(colours[i])[1]));
   };
 
   var legend = svg_map.selectAll('.legend')
@@ -311,11 +338,21 @@ function redrawMap(_dataSeries) { // selectionDataValue
 
   // Re-populate the text of the legend with new ranges
   // Legend
-  //
+
   // Get every area name
   legend_text = [];
+
+  // change formatting for some data series
+  if (_dataSeries === "threesixty_blf_proportion" || _dataSeries === "perhead_charity_count" || _dataSeries === "perhead_charity_count_local" || _dataSeries === "IMD_extent")
+  {
+    formatText = d3.format(",.3f");
+  }
+  else {
+    formatText = d3.format(",.0f");
+  };
+
   for (var i = 0; i < colours.length; i++) {
-    legend_text.push(f(new_scale.invertExtent(colours[i])[0]) + " - " + f(new_scale.invertExtent(colours[i])[1]));
+    legend_text.push(formatText(new_scale.invertExtent(colours[i])[0]) + " - " + formatText(new_scale.invertExtent(colours[i])[1]));
   };
 
   legend = svg_map.selectAll('.legend')

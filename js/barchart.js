@@ -12,13 +12,13 @@ var selectedDataseries_bar;
 var bars;
 
 //  Width and height of element
-var width_bar = (document.getElementById("barchart").clientWidth);
+var width_bar = document.getElementById("barchart").clientWidth;
 var height_bar = document.getElementById("barchart").clientHeight;
 
 // Margin
 var margin_bar = {
   top: 10,
-  left: 50,
+  left: 60,
   right: 10,
   bottom: 40
 };
@@ -88,7 +88,7 @@ function createChartFrame_bar(_dataBar, callback) {
   // Add text label for the x axis
   svg_bar.append('text')
     .attr('transform', 'translate(' + (width_bar / 2) + ' ,' +
-      (height_bar + margin_bar.top + 30) + ')')
+      (height_bar + margin_bar.top + 15) + ')')
     .style("text-anchor", "middle")
     .text("Local Authority Districts");
 
@@ -98,13 +98,14 @@ function createChartFrame_bar(_dataBar, callback) {
   svg_bar.append('g')
     .attr("class", "y axis")
     .call(d3.axisLeft(y_scale_bar))
-    .style("font", "10px");
+    // .style("font", "10px")
+    ;
 
   // Add text label for the y axis
   svg_bar.append("text")
     .attr("transform", "rotate(-90)")
     // .style("font", "1.1rem")
-    .attr("y", 0 - margin_bar.left)
+    .attr("y", 0 - (margin_bar.left)*1)
     .attr("x", 0 - (height_bar / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")

@@ -15,7 +15,7 @@ var histogram_data;
 var numb_thresholds = 10;
 
 //  Width and height of element
-var width_hist = (document.getElementById("histogram").clientWidth);
+var width_hist = document.getElementById("histogram").clientWidth;
 var height_hist = 500 // document.getElementById("histogram").clientHeight;
 
 var padding = 50;
@@ -107,10 +107,11 @@ function createChartFrame_hist(_dataHist, callback) {
 
   // Add text label for the x axis
   svg_hist.append('text')
+    .attr("class", "xaxis hist text")
     .attr('transform', 'translate(' + (width_hist / 2) + ' ,' +
       (height_hist + margin_hist.top + 30) + ')')
     .style("text-anchor", "middle")
-    .text("Buckets (input data)");
+    .text("charity_count_local");
 
   // Make the y axis
   yaxis_hist = d3.axisLeft()
@@ -126,6 +127,7 @@ function createChartFrame_hist(_dataHist, callback) {
   svg_hist.append("text")
     .attr("transform", "rotate(-90)")
     // .style("font", "1.1rem")
+    // horizontal placement
     .attr("y", 0 - margin_hist.left - 10)
     .attr("x", 0 - (height_hist / 2))
     .attr("dy", "1em")
@@ -219,40 +221,40 @@ function populateChartTitleHist(input) {
   var chartTitleText = document.createTextNode("Series: " + input);
   chartTitle.appendChild(chartTitleText);
 
-// summary statistics
-histSummaryDiv = document.getElementById("histo_summary");
-histSummaryDiv.innerHTML = '';
+  // summary statistics
+  histSummaryDiv = document.getElementById("histo_summary");
+  histSummaryDiv.innerHTML = '';
 
-var list = document.createElement('ul');
-var histSummaryHeading = document.createTextNode("Summary data: ");
+  var list = document.createElement('ul');
+  var histSummaryHeading = document.createTextNode("Summary data: ");
 
-var listItem1 = document.createElement('li');
-var listText1 = document.createTextNode("Min: ");
-listItem1.appendChild(listText1);
-list.appendChild(listItem1);
+  var listItem1 = document.createElement('li');
+  var listText1 = document.createTextNode("Min: ");
+  listItem1.appendChild(listText1);
+  list.appendChild(listItem1);
 
-var listItem2 = document.createElement('li');
-var listText2 = document.createTextNode("Min of variable: ");
-listItem2.appendChild(listText2);
-list.appendChild(listItem2);
+  var listItem2 = document.createElement('li');
+  var listText2 = document.createTextNode("Min of variable: ");
+  listItem2.appendChild(listText2);
+  list.appendChild(listItem2);
 
-var listItem3 = document.createElement('li');
-var listText3 = document.createTextNode("Max of variable: ");
-listItem3.appendChild(listText3);
-list.appendChild(listItem3);
+  var listItem3 = document.createElement('li');
+  var listText3 = document.createTextNode("Max of variable: ");
+  listItem3.appendChild(listText3);
+  list.appendChild(listItem3);
 
-var listItem4 = document.createElement('li');
-var listText4 = document.createTextNode("Max size of bar: ");
-listItem4.appendChild(listText4);
-list.appendChild(listItem4);
+  var listItem4 = document.createElement('li');
+  var listText4 = document.createTextNode("Max size of bar: ");
+  listItem4.appendChild(listText4);
+  list.appendChild(listItem4);
 
-var listItem5 = document.createElement('li');
-var listText5 = document.createTextNode("???: ");
-listItem5.appendChild(listText5);
-list.appendChild(listItem5);
+  var listItem5 = document.createElement('li');
+  var listText5 = document.createTextNode("???: ");
+  listItem5.appendChild(listText5);
+  list.appendChild(listItem5);
 
-histSummaryDiv.appendChild(histSummaryHeading);
-histSummaryDiv.appendChild(list);
+  histSummaryDiv.appendChild(histSummaryHeading);
+  histSummaryDiv.appendChild(list);
 
 }
 
@@ -262,7 +264,7 @@ function redrawHist(e) {
   dropdownListHist = document.getElementById("dropdown_histo");
 
   selectedDisorder_hist = dropdownListHist[dropdownListHist.selectedIndex]
-
+  // console.log(selectedDisorder_hist.value)
   map = data_hist.map(function(d) {
     return parseFloat(+d[selectedDisorder_hist.value]);
   })
@@ -272,11 +274,11 @@ function redrawHist(e) {
     .thresholds(numb_thresholds)
     (map);
 
-    // Make histogram bars
-    histogram_bars = svg_hist.selectAll(".bar")
-      .data(histogram_data)
-      .enter()
-      .append("g")
+  // Make histogram bars
+  histogram_bars = svg_hist.selectAll(".bar")
+    .data(histogram_data)
+    .enter()
+    .append("g")
 
   x_scale_hist = d3.scaleLinear()
     .domain([0, d3.max(map)]) // (Math.ceil(d3.max(map) / 10)) * 10 // d3.min(map)
@@ -288,27 +290,26 @@ function redrawHist(e) {
     }))])
     .rangeRound([height_hist, 0]);
 
-    xaxis_hist = d3.axisBottom()
-      .scale(x_scale_hist);
+  xaxis_hist = d3.axisBottom()
+    .scale(x_scale_hist);
 
-      // Add the x axis
-      d3.selectAll("g.x.axis.hist")
-        .transition()
-        .call(xaxis_hist);
+  // Add the x axis
+  d3.selectAll("g.x.axis.hist")
+    .transition()
+    .call(xaxis_hist);
 
   yaxis_hist = d3.axisLeft()
     .scale(y_scale_hist);
 
-    // Add the y axis
-    d3.selectAll("g.y.axis.hist")
-      .transition()
-      .call(yaxis_hist);
+  // Add the y axis
+  d3.selectAll("g.y.axis.hist")
+    .transition()
+    .call(yaxis_hist);
 
   svg_hist.selectAll(".bar")
     .transition()
     .attr('height', function(d) {
-      return height_hist - y_scale_hist(d.length)
-      ;
+      return height_hist - y_scale_hist(d.length);
     })
     .attr('width', function(d) {
       return x_scale_hist(d.x1 - d.x0);
@@ -322,9 +323,11 @@ function redrawHist(e) {
     .ease(d3.easeCubicInOut)
     .duration(750)
     .select("title") // ???
-    .text(function(d) {
-      return d[selectedDisorder_hist.value];
-    });
+    .text(selectedDisorder_hist.value);
+
+  svg_hist.selectAll(".xaxis.hist.text")
+    .transition()
+    .text(selectedDisorder_hist.value);
 
   populateChartTitleHist(selectedDisorder_hist.value);
 

@@ -11,8 +11,9 @@ This CSS is written for mobile-first, i.e. max-wdtih:450px, with media queries f
 /* Default text options (across the site) */
 
 html {
-  font-size: 14px;
-  font-family: 'Noto Sans', sans-serif;
+  font-size: 16px;
+  font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+  /* font-family: 'Noto Sans', sans-serif; */
 }
 
 /* Body */
@@ -49,7 +50,8 @@ h1 {
   font-size: 5vw;
   margin-left: 2vw;
   margin-right: 2vw;
-  color: #d29000
+  color: #d29000;
+  font-family: "Franklin Gothic Medium", "Franklin Gothic", "ITC Franklin Gothic", Arial, sans-serif;
 }
 
 h2 {
@@ -129,7 +131,7 @@ header {
 }
 
 .axis {
-  font: 14px sans-serif;
+  /* font: 14px sans-serif; */
 }
 
 .grid line {
