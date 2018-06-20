@@ -84,14 +84,11 @@ function init() {
 
       ///// Drop down for areas
 
-      // console.log(area_data);
       // Get every area name
       var elements_areas = [];
-      // console.log(area_data.length);
       for (var i = 0; i < area_data.length; i++) {
         elements_areas.push(area_data[i].la_name);
       }
-      // console.log(elements_areas);
       selection = elements_areas;
 
       var selectorAreas = d3.select("#drop_map_areas")
@@ -99,7 +96,6 @@ function init() {
         .attr("id", "dropdown_map_areas")
         .on("change", function(d) {
           selection = document.getElementById("dropdown_map_areas");
-          // console.log(selection);
           selectionAreaValue = selection.value;
           for (var i = 0; i < area_data.length; i++) {
             if (area_data[i].la_name === selectionAreaValue) {
@@ -129,7 +125,6 @@ function init() {
         .filter(function(d) {
           return (d != "oslaua" && d != "la_name");
         });
-      // console.log(elements_map)
       selectedDataseries_bar = elements_map[0];
 
       selectorMap = d3.select("#drop_map_series")
@@ -137,9 +132,7 @@ function init() {
         .attr("id", "dropdown_map_series")
         .on("change", function(d) {
           selection = document.getElementById("dropdown_map_series");
-          // console.log(selection);
           selectionDataValue = selection.value;
-          // console.log(selectionDataValue)
 
           redrawMap(selectionDataValue)
 
@@ -168,11 +161,9 @@ function draw(boundaries) {
   colour_scale.domain(d3.extent(area_data, function(d) {
     return +d.charity_count_local_rate;
   }));
-  // console.log(colour_scale.invertExtent(colours[1]));
 
   // Extract the "Feature Collection" from the topojson
   boundsFC = topojson.feature(boundaries, boundaries.objects.Local_Authority_Districts_December_2015_Super_Generalised_Clipped_Boundaries_in_Great_Britain);
-  // console.log(boundsFC);
   // Set default values for the projection function to convert boundary coordinates to pixels
   projection.scale(1).translate([0, 0]);
 
@@ -198,22 +189,11 @@ function draw(boundaries) {
     // Add click listener to each area
     .on('click', clicked);
 
-  // var rejoin = svg_map.select("g").selectAll('.area')
-  //   .data(boundsFC.features);
-  //
-  // rejoin.exit().remove();
-  // rejoin.enter().append("circle");
-
-  // rejoin.transition()
-  //   .duration(500)
-  //   .style('fill', 'red');
-
   var defaultSeries = "charity_count_local";
 
   updateColours(defaultSeries);
 
   // Legend
-  // Get every area name
   legend_text = [];
   for (var i = 0; i < colours.length; i++) {
     legend_text.push(f(colour_scale.invertExtent(colours[i])[0]) + " - " + f(colour_scale.invertExtent(colours[i])[1]));
@@ -301,7 +281,6 @@ function populateAreaInfo(name, stat, outputDetails, outputStat) {
 
 // Redraw selected data series onto the map
 function redrawMap(_dataSeries) { // selectionDataValue
-  // console.log(_dataSeries)
 
   // update the title
   chartTitleMap = document.getElementById("map_title");
@@ -314,7 +293,6 @@ function redrawMap(_dataSeries) { // selectionDataValue
     .range(colours)
 
   new_scale.domain(d3.extent(area_data, function(d) {
-    // console.log(+d[_dataSeries])
     return +d[_dataSeries];
   }));
 
@@ -322,10 +300,8 @@ function redrawMap(_dataSeries) { // selectionDataValue
     .transition()
     .duration(500)
     .style('fill', function(d) {
-      // console.log(area_data.length)
       for (var i = 0; i < area_data.length; i++) {
         if (area_data[i].oslaua === d.properties.lad15cd) {
-          // console.log(parseFloat(area_data[i][_dataSeries]))
           return new_scale(parseFloat(area_data[i][_dataSeries]));
         }
       }
@@ -341,11 +317,9 @@ function redrawMap(_dataSeries) { // selectionDataValue
   for (var i = 0; i < colours.length; i++) {
     legend_text.push(f(new_scale.invertExtent(colours[i])[0]) + " - " + f(new_scale.invertExtent(colours[i])[1]));
   };
-  // console.log(legend_text);
 
   legend = svg_map.selectAll('.legend')
     .data(colours);
-  // console.log(legend)
 
   // add a ‘g’ element for each colour in the data,
   var new_legend = legend
@@ -367,11 +341,9 @@ function redrawMap(_dataSeries) { // selectionDataValue
     })
     .attr('stroke', 'black')
     .attr('stroke-width', '0.5px');
-  // console.log(legend_text)
 
   d3.selectAll('.legend_text').text(
     function(d, i) {
-      console.log(legend_text[i])
       return legend_text[i];
     }
   );
@@ -385,13 +357,8 @@ function clicked(d) {
   // Get the relevant data and display it in our "info" div
   for (var i = 0; i < area_data.length; i++) {
     // d.properties.lad15cd gives us the ID of the clicked area
-    // console.log(boundaries_data.objects.Local_Authority_Districts_December_2015_Super_Generalised_Clipped_Boundaries_in_Great_Britain.geometries[i].properties.lad15cd)
-    // console.log(selectionDataValue)
     if (area_data[i].oslaua === d.properties.lad15cd) {
-      // console.log(area_name = area_data[i].la_name);
       area_name = area_data[i].la_name;
-      // console.log(area_data[i][selectionDataValue]);
-      // console.log(selectionDataValue)
       area_stat_value = area_data[i][selectionDataValue];
     }
   }

@@ -37,7 +37,6 @@ function createChart_hist(_dataHist) {
   data_hist = _dataHist
 
   // Get every column value
-  // console.log(Object.keys(_dataHist[0]))
   elements_hist = Object.keys(_dataHist[0])
     .filter(function(d) {
       return (d != "oslaua" && d != "la_name" && d != "public_ core_spend_m_rank" && d != "public_core_spend_per_head_rank");
@@ -81,20 +80,9 @@ function createChartFrame_hist(_dataHist, callback) {
   height_hist = height_hist - margin_hist.top - margin_hist.bottom;
 
   // x scale
-  // console.log(d3.max(map))
-  // console.log(width_hist)
   x_scale_hist = d3.scaleLinear()
-    // max of the variable
-    // .domain([0, d3.extent(map)])
-    // _dataHist, function(d) {
-    // return +d.charity_count_local;
-    // })
     .domain([0, d3.max(map)]) // (Math.ceil(d3.max(map) / 10)) * 10
     .rangeRound([0, width_hist - padding]);
-
-  // console.log(histogram_data.map(function(d) { return d.length; }))
-  //
-  // console.log((Math.ceil((d3.max(histogram_data.map(function(d) { return d.length; })))/10)) * 10)
 
   // y scale
   y_scale_hist = d3.scaleLinear()
@@ -193,11 +181,9 @@ function drawHist() {
       return y_scale_hist(d.length);
     })
     .attr('width', function(d) {
-      // console.log(x_scale_hist(d.x1 - d.x0));
       return x_scale_hist(d.x1 - d.x0);
     }) //
     .attr('height', function(d) {
-      // console.log(height_hist - y_scale_hist(d.length))
       return height_hist - y_scale_hist(d.length);
     }) //
     .attr('fill', '#abac00')
@@ -225,7 +211,6 @@ function drawHist() {
   populateChartTitleHist(selectedDisorder_hist);
 
 } // End of drawHist
-
 
 // Create chart titles
 function populateChartTitleHist(input) {
@@ -277,12 +262,10 @@ function redrawHist(e) {
   dropdownListHist = document.getElementById("dropdown_histo");
 
   selectedDisorder_hist = dropdownListHist[dropdownListHist.selectedIndex]
-  // console.log("the selected data series is " + selectedDisorder_hist.value);
 
   map = data_hist.map(function(d) {
     return parseFloat(+d[selectedDisorder_hist.value]);
   })
-  // console.log(map)
 
   // create histogram data (ie. summarised into buckets)
   histogram_data = d3.histogram()
@@ -295,28 +278,11 @@ function redrawHist(e) {
       .enter()
       .append("g")
 
-  // console.log("the histogram data array is ");
-  // console.log(histogram_data);
-  // console.log("the largest array (and therefore the y-axis limit) is " + d3.max(histogram_data.map(function(d) {
-  //   return d.length;
-  // })))
-  // console.log("the largest value (and therefore the x axis limit) is " + d3.max(map));
-
   x_scale_hist = d3.scaleLinear()
-    // .domain([0, d3.max(map)])
-    // .domain([0, d3.max(data_hist, function(d) {
-    //   return (+d[selectedDisorder_hist.value] * 1.1);
-    // })])
-    // .domain([0, d3.max(data_hist.map(function(i) {
-    //   return parseFloat(i.selectedDisorder_hist.value);
-    // }))])
     .domain([0, d3.max(map)]) // (Math.ceil(d3.max(map) / 10)) * 10 // d3.min(map)
     .rangeRound([0, width_hist - padding]);
 
   y_scale_hist = d3.scaleLinear()
-    // .domain([0, ((Math.ceil((d3.max(histogram_data.map(function(d) {
-    //   return d.length;
-    // }))) / 10)) * 10)])
     .domain([0, d3.max(histogram_data.map(function(d) {
       return d.length;
     }))])
@@ -338,26 +304,20 @@ function redrawHist(e) {
       .transition()
       .call(yaxis_hist);
 
-
   svg_hist.selectAll(".bar")
     .transition()
     .attr('height', function(d) {
-      // console.log("Height is " + (height_hist - y_scale_hist(d.length)))
       return height_hist - y_scale_hist(d.length)
-      // (height_hist - y_scale_hist(+d[selectedDisorder_hist.value]))
       ;
     })
     .attr('width', function(d) {
-      // console.log("Width is " + x_scale_hist(d.x1 - d.x0));
       return x_scale_hist(d.x1 - d.x0);
     }) //
     .attr("x", function(d, i) {
       return x_scale_hist(d.x0);
-      // 20 + (width_hist / d.length) * i;
     })
     .attr("y", function(d) {
       return y_scale_hist(d.length);
-      // y_scale_hist(+d[selectedDisorder_hist.value]);
     })
     .ease(d3.easeCubicInOut)
     .duration(750)

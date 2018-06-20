@@ -14,8 +14,6 @@ var bars;
 //  Width and height of element
 var width_bar = (document.getElementById("barchart").clientWidth);
 var height_bar = document.getElementById("barchart").clientHeight;
-// console.log(width_bar) // 768
-// console.log(height_bar) // 481
 
 // Margin
 var margin_bar = {
@@ -163,11 +161,6 @@ function drawBar() {
       return 20 + (width_bar / data_bar.length) * i;
     })
     .attr('height', function(d) {
-      // console.log(+d.threesixty_national) // 26
-      // console.log(height_bar); // 431
-      // console.log(y_scale_bar(parseFloat(+d.threesixty_national))); // 424
-      // console.log(height_bar - y_scale_bar(parseFloat(+d.threesixty_national))) // 7
-
       return (height_bar - y_scale_bar(+d.charity_count_local));
     })
     .attr("y", function(d) {
@@ -211,7 +204,6 @@ function redrawBar(e) {
 
   dropdownListBar = document.getElementById("dropdown_bar");
   selectedDataseries_bar = dropdownListBar[dropdownListBar.selectedIndex]
-  console.log(selectedDataseries_bar.value)
   var selectedDataseries_bar_name = selectedDataseries_bar.value
 
   y_scale_bar.domain([0, d3.max(data_bar, function(d) {
@@ -220,30 +212,21 @@ function redrawBar(e) {
 
   yaxis_bar.scale(y_scale_bar);
 
-// Here I want to refresh the data, bringing it in again and sorting by selectedDataseries_bar_name
-
-console.log(selectedDataseries_bar_name)
-// console.log(data_bar);
 data_bar.sort(function(a, b) {
-  console.log( b[selectedDataseries_bar_name])
   return b[selectedDataseries_bar_name] - a[selectedDataseries_bar_name];
 });
-// console.log(data_bar);
 
 bars = svg_bar.selectAll("rect")
     .data(data_bar)
     .transition()
     .attr('height', function(d) {
       return (height_bar - y_scale_bar(+d[selectedDataseries_bar.value]));
-      // return (height_bar - y_scale_bar(+d.threesixty_national));
     })
     .attr("x", function(d, i) {
       return 20 + (width_bar / data_bar.length) * i;
-      // return 20 + (width_bar / data_bar.length) * i;
     })
     .attr("y", function(d) {
       return y_scale_bar(+d[selectedDataseries_bar.value]);
-      // return y_scale_bar(+d.threesixty_national);
     })
     .ease(d3.easeCubicInOut)
     .duration(750)
