@@ -39,7 +39,7 @@ function createChart_hist(_dataHist) {
   // Get every column value
   elements_hist = Object.keys(_dataHist[0])
     .filter(function(d) {
-      return (d != "oslaua" && d != "la_name");
+      return (d != "oslaua" && d != "la_name" && d != "public_ core_spend_m_rank" && d != "public_core_spend_per_head_rank");
     });
 
   selectedDisorder_hist = elements_hist[0];
