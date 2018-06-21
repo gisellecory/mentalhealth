@@ -98,14 +98,14 @@ function createChartFrame_bar(_dataBar, callback) {
   svg_bar.append('g')
     .attr("class", "y axis")
     .call(d3.axisLeft(y_scale_bar))
-    // .style("font", "10px")
-    ;
+  // .style("font", "10px")
+  ;
 
   // Add text label for the y axis
   svg_bar.append("text")
     .attr("transform", "rotate(-90)")
     // .style("font", "1.1rem")
-    .attr("y", 0 - (margin_bar.left)*1)
+    .attr("y", 0 - (margin_bar.left) * 1)
     .attr("x", 0 - (height_bar / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
@@ -213,11 +213,11 @@ function redrawBar(e) {
 
   yaxis_bar.scale(y_scale_bar);
 
-data_bar.sort(function(a, b) {
-  return b[selectedDataseries_bar_name] - a[selectedDataseries_bar_name];
-});
+  data_bar.sort(function(a, b) {
+    return b[selectedDataseries_bar_name] - a[selectedDataseries_bar_name];
+  });
 
-bars = svg_bar.selectAll("rect")
+  bars = svg_bar.selectAll("rect")
     .data(data_bar)
     .transition()
     .attr('height', function(d) {

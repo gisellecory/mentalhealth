@@ -12,7 +12,6 @@ var svg_map;
 var g_map;
 var projection;
 var path;
-var zoom;
 var area_data;
 var area_name_text;
 var area_stat;
@@ -31,6 +30,8 @@ var b;
 var s;
 var t;
 
+var centered;
+
 //// No decimal place and thousand separator
 var formatText = d3.format(",.0f");
 var legend_text = [];
@@ -47,25 +48,29 @@ var colourSet1_colour8 = "#673052";
 var colourSet1_colour9 = "#552041"; // Dark
 
 // Colour pallete 2
-var colourSet2_colour1 = "#9A3272";
-var colourSet2_colour2 = "#A53F7E";
-var colourSet2_colour3 = "#B14C8A";
-var colourSet2_colour4 = "#BC5996";
-var colourSet2_colour5 = "#C867A3";
-var colourSet2_colour6 = "#D474AF";
-var colourSet2_colour7 = "#DF81BB";
-var colourSet2_colour8 = "#EB8EC7";
-var colourSet2_colour9 = "#F79CD4";
+var colourSet2_colour1 = "#D3D36C"; // Light
+var colourSet2_colour2 = "#C6C761";
+var colourSet2_colour3 = "#BABA56";
+var colourSet2_colour4 = "#AEAE4B";
+var colourSet2_colour5 = "#A1A240";
+var colourSet2_colour6 = "#959535";
+var colourSet2_colour7 = "#88892A";
+var colourSet2_colour8 = "#7C7D1F";
+var colourSet2_colour9 = "#707114"; // Dark
 
+// set colour scale (1)
+var colourSet1 = [d3.rgb(colourSet1_colour1), d3.rgb(colourSet1_colour2), d3.rgb(colourSet1_colour3), d3.rgb(colourSet1_colour4), d3.rgb(colourSet1_colour5), d3.rgb(colourSet1_colour6), d3.rgb(colourSet1_colour7), d3.rgb(colourSet1_colour8), d3.rgb(colourSet1_colour9)];
 
-// set colour scale
-var colours = [d3.rgb(colourSet1_colour1), d3.rgb(colourSet1_colour2), d3.rgb(colourSet1_colour3), d3.rgb(colourSet1_colour4), d3.rgb(colourSet1_colour5), d3.rgb(colourSet1_colour6), d3.rgb(colourSet1_colour7), d3.rgb(colourSet1_colour8), d3.rgb(colourSet1_colour9)];
+var colourScale1 = d3.scaleQuantile()
+  .range(colourSet1);
 
-// var colours = colorbrewer.Blues[9]
+// set colour scale (2)
+var colourSet2 = [d3.rgb(colourSet2_colour1), d3.rgb(colourSet2_colour2), d3.rgb(colourSet2_colour3), d3.rgb(colourSet2_colour4), d3.rgb(colourSet2_colour5), d3.rgb(colourSet2_colour6), d3.rgb(colourSet2_colour7), d3.rgb(colourSet2_colour8), d3.rgb(colourSet1_colour9)];
 
-var colour_scale = d3.scaleQuantile()
-  .range(colours)
+var colourScale2 = d3.scaleQuantile()
+  .range(colourSet2);
 
+/////////////////
 // Create map
 function init() {
 
@@ -78,15 +83,10 @@ function init() {
     .attr("id", "svg_map")
     .attr("width", "80vw") // width_map
     .attr("height", "90vh"); // height_map
+    // .on('click', clicked);
 
   // Add a g element to our SVG container
   g_map = svg_map.append("g");
-
-  // Create zoom function
-  zoom = d3.zoom().on("zoom", function() {
-    g_map.attr('transform', d3.event.transform);
-  });
-  svg_map.call(zoom);
 
   // Projects from spherical coordinates (degrees) to Cartesian (pixels)
   projection = d3.geoAlbers().rotate([0, 0]);
@@ -127,7 +127,7 @@ function init() {
           for (var i = 0; i < area_data.length; i++) {
             if (area_data[i].la_name === selectionAreaValue) {
               area_name = area_data[i].la_name;
-              area_stat_value = area_data[i].charity_count_local_rate;
+              area_stat_value = area_data[i].charity_count_local;
             }
           }
           populateAreaInfo(area_name, area_stat_value, '#area_name', '#stat');
@@ -150,7 +150,7 @@ function init() {
       // Get every column value
       elements_map = Object.keys(area_data[0])
         .filter(function(d) {
-          return (d != "oslaua" && d != "la_name");
+          return (d != "oslaua" && d != "la_name" && d != "Region_Code" && d != "Region" && d != "vote_outcome");
         });
       selectedDataseries_bar = elements_map[0];
 
@@ -185,8 +185,11 @@ function init() {
 // Draw our data onto the map
 function draw(boundaries) {
 
-  colour_scale.domain(d3.extent(area_data, function(d) {
-    return +d.charity_count_local_rate;
+  colourScale1.domain(d3.extent(area_data, function(d) {
+    return +d.charity_count_local;
+  }));
+  colourScale2.domain(d3.extent(area_data, function(d) {
+    return +d.charity_count_local;
   }));
 
   // Extract the "Feature Collection" from the topojson
@@ -222,12 +225,12 @@ function draw(boundaries) {
 
   // Legend
   legend_text = [];
-  for (var i = 0; i < colours.length; i++) {
-    legend_text.push(formatText(colour_scale.invertExtent(colours[i])[0]) + " - " + formatText(colour_scale.invertExtent(colours[i])[1]));
+  for (var i = 0; i < colourSet1.length; i++) {
+    legend_text.push(formatText(colourScale1.invertExtent(colourSet1[i])[0]) + " - " + formatText(colourScale1.invertExtent(colourSet1[i])[1]));
   };
 
   var legend = svg_map.selectAll('.legend')
-    .data(colours);
+    .data(colourSet1);
 
   // add a ‘g’ element for each colour in the data,
   new_legend = legend
@@ -276,7 +279,17 @@ function updateColours(dataSeries) {
     .style('fill', function(d) {
       for (var i = 0; i < area_data.length; i++) {
         if (area_data[i].oslaua === d.properties.lad15cd) {
-          return colour_scale(parseFloat(area_data[i][dataSeries]));
+          // vote_outcome (leave is 1, remain is 2)
+          if (area_data[i].vote_outcome === "2") {
+            // console.log(area_data[i].vote_outcome);
+            // console.log(colourScale1(parseFloat(area_data[i][dataSeries])))
+            return colourScale1(parseFloat(area_data[i][dataSeries]));
+          }
+          if (area_data[i].vote_outcome === "1") {
+            // console.log(area_data[i].vote_outcome);
+            // console.log(colourScale2(parseFloat(area_data[i][dataSeries])))
+            return colourScale2(parseFloat(area_data[i][dataSeries]));
+          }
         }
       }
       // If we don't find a colour, return white
@@ -318,11 +331,18 @@ function redrawMap(_dataSeries) { // selectionDataValue
   var chartTitleMapText = document.createTextNode("Data series: " + _dataSeries);
   chartTitleMap.appendChild(chartTitleMapText);
 
-  // create a new colour scale, given data series
-  var new_scale = d3.scaleQuantile()
-    .range(colours)
+  // create new colour scales, given data series
+  var colourScale1Update = d3.scaleQuantile()
+    .range(colourSet1)
 
-  new_scale.domain(d3.extent(area_data, function(d) {
+  var colourScale2Update = d3.scaleQuantile()
+    .range(colourSet2)
+
+  colourScale1Update.domain(d3.extent(area_data, function(d) {
+    return +d[_dataSeries];
+  }));
+
+  colourScale2Update.domain(d3.extent(area_data, function(d) {
     return +d[_dataSeries];
   }));
 
@@ -332,7 +352,15 @@ function redrawMap(_dataSeries) { // selectionDataValue
     .style('fill', function(d) {
       for (var i = 0; i < area_data.length; i++) {
         if (area_data[i].oslaua === d.properties.lad15cd) {
-          return new_scale(parseFloat(area_data[i][_dataSeries]));
+          // vote_outcome
+          // console.log(i)
+          // console.log(area_data[i].vote_outcome);
+          if (area_data[i].vote_outcome === "2") {
+            return colourScale1Update(parseFloat(area_data[i][_dataSeries]));
+          }
+          if (area_data[i].vote_outcome === "1") {
+            return colourScale2Update(parseFloat(area_data[i][_dataSeries]));
+          }
         }
       }
       // If we don't find a colour, return white
@@ -346,18 +374,18 @@ function redrawMap(_dataSeries) { // selectionDataValue
   legend_text = [];
 
   // change formatting for some data series
-  if (_dataSeries === "threesixty_blf_proportion" || _dataSeries === "perhead_charity_count" || _dataSeries === "perhead_charity_count_local" || _dataSeries === "IMD_extent") {
+  if (_dataSeries === "threesixty_blf_proportion" || _dataSeries === "perhead_charity_count" || _dataSeries === "perhead_charity_count_local" || _dataSeries === "IMD_extent" || _dataSeries === "Pct_Rejected") {
     formatText = d3.format(",.3f");
   } else {
     formatText = d3.format(",.0f");
   };
 
-  for (var i = 0; i < colours.length; i++) {
-    legend_text.push(formatText(new_scale.invertExtent(colours[i])[0]) + " - " + formatText(new_scale.invertExtent(colours[i])[1]));
+  for (var i = 0; i < colourSet1.length; i++) {
+    legend_text.push(formatText(colourScale1Update.invertExtent(colourSet1[i])[0]) + " - " + formatText(colourScale1Update.invertExtent(colourSet1[i])[1]));
   };
 
   legend = svg_map.selectAll('.legend')
-    .data(colours);
+    .data(colourSet1);
 
   // add a ‘g’ element for each colour in the data,
   var new_legend = legend
@@ -392,15 +420,16 @@ function redrawMap(_dataSeries) { // selectionDataValue
 // Display data on click
 function clicked(d) {
 
-  // Get the relevant data and display it in our "info" div
-  for (var i = 0; i < area_data.length; i++) {
-    // d.properties.lad15cd gives us the ID of the clicked area
-    if (area_data[i].oslaua === d.properties.lad15cd) {
-      area_name = area_data[i].la_name;
-      area_stat_value = area_data[i][selectionDataValue];
+    // Get the relevant data and display it in our "info" div
+    for (var i = 0; i < area_data.length; i++) {
+      // d.properties.lad15cd gives us the ID of the clicked area
+      if (area_data[i].oslaua === d.properties.lad15cd) {
+        // console.log(area_data[i].vote_outcome)
+        area_name = area_data[i].la_name;
+        area_stat_value = area_data[i][selectionDataValue];
+      }
     }
-  }
 
-  populateAreaInfo(area_name, area_stat_value, '#area_name', '#stat');
+    populateAreaInfo(area_name, area_stat_value, '#area_name', '#stat');
 
-} // End of clicked function
+  } // End of clicked function

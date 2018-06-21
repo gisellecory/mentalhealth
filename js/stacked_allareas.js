@@ -9,7 +9,7 @@ var svg_stacked = d3.select("#svg_stacked"),
   },
   width_stack = +svg_stacked.attr("width") - margin_stack.left - margin_stack.right,
   height_stack = +svg_stacked.attr("height") - margin_stack.top - margin_stack.bottom,
-  g_stack = svg_stacked.append("g").attr("transform", "translate(" + 70 + "," + margin_stack.top + ")");
+  g = svg_stacked.append("g").attr("transform", "translate(" + 70 + "," + margin_stack.top + ")");
 
 var x = d3.scaleBand()
   .rangeRound([0, width_stack])
@@ -43,7 +43,7 @@ d3.csv("data/lad_data_nocol_stacked.csv", function(d, i, columns) {
   })]).nice();
   z.domain(keys);
 
-  g_stack.append("g")
+  g.append("g")
     .selectAll("g")
     .data(d3.stack().keys(keys)(data))
     .enter().append("g")
@@ -67,7 +67,7 @@ d3.csv("data/lad_data_nocol_stacked.csv", function(d, i, columns) {
     .attr("width", x.bandwidth());
 
   // X axis
-  g_stack.append("g")
+  g.append("g")
     .attr("class", "axis")
     .attr("transform", "translate(0," + height_stack + ")")
     .call(d3.axisBottom(x))
@@ -81,7 +81,7 @@ svg_stacked.append('text')
     .text("Local Authority Districts");
 
   // Y axis
-  g_stack.append("g")
+  g.append("g")
     .attr("class", "axis")
     .call(d3.axisLeft(y).ticks(null, "s"))
     .append("text")
@@ -99,7 +99,7 @@ svg_stacked.append('text')
     .text("Amount (£)");
 
   // Legend
-  var legend = g_stack.append("g")
+  var legend = g.append("g")
     // .attr("font-size", 10)
     .attr("text-anchor", "end")
     .selectAll("g")
